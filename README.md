@@ -52,3 +52,8 @@
 - Use `asyncio.sleep()` instead  
 
 ---
+
+### OpenAI Agents SDK
+1. Agents: which are LLMs equipped with instructions and tools
+2. Handoffs: which allow agents to delegate to other agents for specific tasks
+3. Guardrails: which enable validation of agent inputs and outputs
