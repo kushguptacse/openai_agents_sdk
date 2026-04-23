@@ -1,6 +1,6 @@
 from agents import Agent, Runner, function_tool
 import asyncio
-from system_prompt import sales_agent_picker_instructions_tools, professional_sales_agent_instructions, engaging_sales_agent_instructions, busy_sales_agent_instructions, sales_agent_picker_instructions
+from system_prompt import subject_instructions, sales_manager_instructions, html_instructions, email_formatter, sales_agent_picker_instructions_tools, professional_sales_agent_instructions, engaging_sales_agent_instructions, busy_sales_agent_instructions, sales_agent_picker_instructions
 from custom_agent_qwen3 import get_model
 from pushover import send_pushover_notification
 
@@ -43,6 +43,29 @@ async def automatic_processing_of_sales_agents_via_tools():
     print("\n-----------------------Best email selected by sales_agent_picker:\n------------------------")
     print(picker_result.final_output)
 
+async def automatic_processing_of_sales_agents_with_handover():
+    
+    subject_writer = Agent(name="Email subject writer", instructions=subject_instructions, model=model, model_settings=model_settings)
+    subject_tool = subject_writer.as_tool(tool_name="subject_writer", tool_description="Write a subject for a cold sales email")
+
+    html_converter = Agent(name="HTML email body converter", instructions=html_instructions, model=model, model_settings=model_settings)
+    html_tool = html_converter.as_tool(tool_name="html_converter",tool_description="Convert a text email body to an HTML email body")
+
+    tools = [subject_tool, html_tool, send_email]
+    emailer_agent = Agent(name="email manager", instructions=email_formatter, tools=tools, model=model, model_settings=model_settings)
+
+
+    sales_agent1_tool = sales_agent1.as_tool(tool_name="sales_agent1", tool_description="Generates a professional cold sales email about ComplAI")
+    sales_agent2_tool = sales_agent2.as_tool(tool_name="sales_agent2", tool_description="Generates an engaging cold sales email about ComplAI")
+    sales_agent3_tool = sales_agent3.as_tool(tool_name="sales_agent3", tool_description="Generates a busy, concise cold sales email about ComplAI")
+    sales_cold_mail_tools = [sales_agent1_tool, sales_agent2_tool, sales_agent3_tool]
+    handoffs = [emailer_agent]
+    sales_manager = Agent(name="Sales Manager", instructions=sales_manager_instructions, tools=sales_cold_mail_tools, handoffs=handoffs, model=model, model_settings=model_settings)
+
+    message = "Send out a cold sales email addressed to Dear CEO from Alice"
+    result = await Runner.run(sales_manager, message)
+    print("\n-----------------------Best email selected and sent by sales_manager:\n------------------------")
+    print(result.final_output)
 
 async def manual_processing_of_sales_agents():
     user_instructions = "send a cold email to a potential customer about ComplAI"
@@ -77,4 +100,4 @@ def send_email(message:str) -> dict[str,str]:
 
 
 if __name__ == "__main__":
-    asyncio.run(automatic_processing_of_sales_agents_via_tools())
+    asyncio.run(automatic_processing_of_sales_agents_with_handover())
