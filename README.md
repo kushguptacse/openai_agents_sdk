@@ -55,5 +55,22 @@
 
 ### OpenAI Agents SDK
 1. Agents: which are LLMs equipped with instructions and tools
-2. Handoffs: which allow agents to delegate to other agents for specific tasks
-3. Guardrails: which enable validation of agent inputs and outputs
+2. Guardrails: which enable validation of agent inputs and outputs
+
+Handoffs:
+
+Allow one agent to transfer the entire conversation/control to another agent.
+The receiving agent becomes the new primary agent and continues execution.
+Typically used when responsibility clearly shifts (e.g., routing from a general agent → specialist agent).
+
+Agents-as-tools: 
+
+Agent can also be used as tools.
+One agent invokes another agent like a function/tool call.
+The called agent executes a task and returns a result.
+Control always returns to the original agent after execution.
+
+Tools → control returns to the original agent
+
+Handoffs → control shifts to the new agent
+
