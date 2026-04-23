@@ -5,7 +5,7 @@ from custom_agent_qwen3 import get_model
 from pushover import send_pushover_notification
 
 model, model_settings = get_model()
-#model = "gpt-4o-mini"  # override the model to use gpt-4o for better performance in sales email generation and selection
+#model = "gpt-4o-mini"
 
 sales_agent1 = Agent(
     name="Professional Sales Agent",
@@ -28,15 +28,11 @@ sales_agent3 = Agent(
     model_settings=model_settings,
 )
 
-
-async def main():
-    await automatic_processing_of_sales_agents_via_tools()
-
 async def automatic_processing_of_sales_agents_via_tools():
-    sales_agent1.as_tool(tool_name="sales_agent1", tool_description="Generates a professional cold sales email about ComplAI")
-    sales_agent2.as_tool(tool_name="sales_agent2", tool_description="Generates an engaging cold sales email about ComplAI")
-    sales_agent3.as_tool(tool_name="sales_agent3", tool_description="Generates a busy, concise cold sales email about ComplAI")
-    tools = [sales_agent1, sales_agent2, sales_agent3, send_email]
+    sales_agent1_tool = sales_agent1.as_tool(tool_name="sales_agent1", tool_description="Generates a professional cold sales email about ComplAI")
+    sales_agent2_tool = sales_agent2.as_tool(tool_name="sales_agent2", tool_description="Generates an engaging cold sales email about ComplAI")
+    sales_agent3_tool = sales_agent3.as_tool(tool_name="sales_agent3", tool_description="Generates a busy, concise cold sales email about ComplAI")
+    tools = [sales_agent1_tool, sales_agent2_tool, sales_agent3_tool, send_email]
     sales_agent_picker = Agent(
         name="Sales Agent Picker",
         instructions=sales_agent_picker_instructions_tools,
@@ -73,11 +69,12 @@ async def manual_processing_of_sales_agents():
     send_pushover_notification(picker_result.final_output)
 
 @function_tool
-def send_email(message):
+def send_email(message:str) -> dict[str,str]:
     """ Send out an email with the given body to all sales prospects """
     send_pushover_notification(message)
+    return {"status": "success"}
 
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(automatic_processing_of_sales_agents_via_tools())
