@@ -1,3 +1,6 @@
+#this file covers topics - openai agent sdk usage, agent tool usage, agent handover, and using pushover for notifications instead of email for demonstration purposes. It includes two main functions - one that demonstrates the use of tools by sales agents and a picker agent, and another that demonstrates a more complex workflow with a sales manager agent that uses handover to an email formatting agent that uses tools to format the email before sending it out. The manual_processing_of_sales_agents function demonstrates how to run multiple agents in parallel and then use a picker agent to select the best output among them.
+# integration with openai as well as qwen3 is possible, you can switch between them by changing the get_model function in custom_agent_qwen3.py and remove model_settings. The send_email function is decorated with @function_tool which allows it to be used as a tool by the agents. In this example, instead of actually sending an email, it sends a pushover notification for demonstration purposes.
+
 from agents import Agent, Runner, function_tool
 import asyncio
 from system_prompt import subject_instructions, sales_manager_instructions, html_instructions, email_formatter, sales_agent_picker_instructions_tools, professional_sales_agent_instructions, engaging_sales_agent_instructions, busy_sales_agent_instructions, sales_agent_picker_instructions
