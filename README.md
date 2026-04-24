@@ -54,11 +54,14 @@
 ---
 
 ### OpenAI Agents SDK
-1. Agents: which are LLMs equipped with instructions and tools
-2. Guardrails: which enable validation of agent inputs and outputs
+#### Agents: 
 
-Handoffs:
+which are LLMs equipped with instructions and tools
 
+#### Guardrails: 
+which enable validation of agent inputs and outputs
+
+#### Handoffs:
 Allow one agent to transfer the entire conversation/control to another agent.
 The receiving agent becomes the new primary agent and continues execution.
 Typically used when responsibility clearly shifts (e.g., routing from a general agent → specialist agent).
