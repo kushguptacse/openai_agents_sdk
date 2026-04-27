@@ -24,28 +24,30 @@ You write concise, to the point cold emails."
 
 
 sales_agent1 = Agent(
-        name="Professional Sales Agent",
-        instructions=instructions1,
-        model="gpt-4o-mini",
+    name="Professional Sales Agent",
+    instructions=instructions1,
+    model="gpt-4o-mini",
 )
 
 sales_agent2 = Agent(
-        name="Engaging Sales Agent",
-        instructions=instructions2,
-        model="gpt-4o-mini",
+    name="Engaging Sales Agent",
+    instructions=instructions2,
+    model="gpt-4o-mini",
 )
 
 sales_agent3 = Agent(
-        name="Busy Sales Agent",
-        instructions=instructions3,
-        model="gpt-4o-mini",
+    name="Busy Sales Agent",
+    instructions=instructions3,
+    model="gpt-4o-mini",
 )
 
+
 @function_tool
-def send_email(message:str) -> Dict[str, str]:
-    """ Send out an email with the given body to all sales prospects """
+def send_email(message: str) -> Dict[str, str]:
+    """Send out an email with the given body to all sales prospects"""
     send_pushover_notification(message)
     return {"status": "success"}
+
 
 description = "Write a cold sales email"
 
@@ -74,13 +76,18 @@ async def main():
     - You must send ONE email using the send_email tool — never more than one.
     """
 
-
-    sales_manager = Agent(name="Sales Manager", instructions=instructions, tools=tools, model="gpt-4o-mini")
+    sales_manager = Agent(
+        name="Sales Manager",
+        instructions=instructions,
+        tools=tools,
+        model="gpt-4o-mini",
+    )
 
     message = "Send a cold sales email addressed to 'Dear CEO'"
 
     with trace("Sales manager"):
         result = await Runner.run(sales_manager, message)
 
-if __name__ == "__main__":    
+
+if __name__ == "__main__":
     asyncio.run(main())
