@@ -2,7 +2,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 MAX_TOKEN = int(os.getenv("MAX_TOKEN", "8192"))
 LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME","qwen3-6-35b-a3b")
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.1"))
